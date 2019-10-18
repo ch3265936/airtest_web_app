@@ -1,0 +1,7 @@
+/log_root
+/report_static
+.idea
+.classpath
+.project
+.settings
+*.iml
