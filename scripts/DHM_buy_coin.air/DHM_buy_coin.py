@@ -206,6 +206,7 @@ if poco(name="Coin").exists():
         sleep(5)
         touch(Template(r"tpl1570768645697.png", record_pos=(-0.007, 0.211), resolution=(1920, 1080)))
         sleep(5)
+stop_app(app_id)
 
 
         
