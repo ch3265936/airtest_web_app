@@ -9,7 +9,7 @@ app_id ='com.toybrickcrush.casual.avidly'
 stop_app(app_id)
 sleep(10)
 start_app(app_id)
-sleep(10)
+sleep(30)
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
 poco.click([0.49,0.58])
@@ -35,10 +35,3 @@ if exists(Template(r"tpl1571380941037.png", record_pos=(0.433, -0.947), resoluti
 sleep(5)
 stop_app(app_id)
 
-
-# -*- encoding=utf8 -*-
-__author__ = "chihai"
-
-from airtest.core.api import *
-
-auto_setup(__file__)
