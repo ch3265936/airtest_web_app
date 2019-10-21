@@ -28,17 +28,17 @@ def install_DHM():
             log('DHM安装成功')
             Logging('DHM安装成功')
             sleep(2)
-            start_app(app_id)
-            sleep(30)
-            from poco.drivers.unity3d import UnityPoco
-            poco = UnityPoco()
-            if poco("ButtonOk"):
-                poco.click([0.49, 0.57])
-                sleep(3)
-            log('DHM打开成功')
-            Logging('DHM打开成功')
-            stop_app(app_id)
-            sleep(3)
+            # start_app(app_id)
+            # sleep(30)
+            # from poco.drivers.unity3d import UnityPoco
+            # poco = UnityPoco()
+            # if poco("ButtonOk"):
+            #     poco.click([0.49, 0.57])
+            #     sleep(3)
+            # log('DHM打开成功')
+            # Logging('DHM打开成功')
+            # stop_app(app_id)
+            # sleep(3)
 
         else:
             log('DHM安装失败')
@@ -59,27 +59,28 @@ def install_TBC():
         log('TBC安装成功')
         Logging('TBC安装成功')
         sleep(2)
-        start_app(app_id)
-        sleep(10)
-        log('TBC打开成功')
-        Logging('TBC打开成功')
-        stop_app(app_id)
-        sleep(3)
-
+        # start_app(app_id)
+        # sleep(10)
+        # log('TBC打开成功')
+        # Logging('TBC打开成功')
+        # stop_app(app_id)
+        # sleep(3)
     else:
         log('TBC安装失败')
         Logging('TBC安装失败')
         pass
-try:
-    install_TBC()
-except:
-    log('TBC安装失败')
-    Logging('TBC安装失败')
-    pass
 try:
     install_DHM()
 except:
     log('DHM安装失败')
     Logging('DHM安装失败')
     pass
+
+try:
+    install_TBC()
+except:
+    log('TBC安装失败')
+    Logging('TBC安装失败')
+    pass
+
 
