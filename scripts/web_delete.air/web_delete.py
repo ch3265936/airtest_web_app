@@ -3,14 +3,11 @@ __author__ = "chihai"
 from airtest.core.api import *
 
 
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from airtest_selenium.proxy import WebChrome
 driver = WebChrome()
 driver.implicitly_wait(20)
-
-
-from utils import  *
+from utils import *
 
 driver.get("http://tech-support.upltv.com:82/index")
 
