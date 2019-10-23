@@ -23,88 +23,22 @@ from poco.drivers.unity3d import UnityPoco
 poco = UnityPoco()
 from poco.exceptions import PocoNoSuchNodeException
 from poco.exceptions import PocoTargetTimeout
-#登入本地方法
-def DHM_login_local():
-    if poco("PanelUserAcceptTips").child("RootNode").child("TransContent").child("ButtonOk"):
-        poco("PanelUserAcceptTips").child("RootNode").child("TransContent").child("ButtonOk").click()
-    sleep(30)
-    click_Name('Login')
-    sleep(5)
-    if poco("BtnSkip"):  # 出现引导
-        sleep(2)
-        for n in range(10):
-            # 判断是否进入主页面 提前关闭循环
-            if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
-                break
-            ui = poco(name="BtnSkip")
-            try:
-                ui.invalidate()
-                ui.wait_for_appearance(timeout=20)
-                ui.click()
-                text('succee click--')
-            except PocoTargetTimeout as to:
-                print('PocoTargetTimeout', to)
-                sleep(1)
-            except PocoNoSuchNodeException as ns:
-                print('PocoNoSuchNodeException', ns)
-                sleep(1)
-            if exists(Template(r"tpl1570707145770.png", record_pos=(0.006, 0.041), resolution=(2160, 1080))):
-                touch(Template(r"tpl1570707145770.png", record_pos=(-0.003, 0.037), resolution=(2160, 1080)))
-                # 选好名字
-                sleep(10)
-                if poco("BtnSkip").exists():
-                    poco("BtnSkip").click()
-                sleep(10)
-                stop_app(app_id)
-                sleep(3)
-                break
-            sleep(10)
-        sleep(3)
-    else:
-        # 跳过引导
-        # 日常登录进入首页（进入首页之前的所有窗口处理）
-        while 1:
-            if poco(name="CloBtn"):
-                click_Name("CloBtn")
-            # 关闭每日签到奖励对话框
-            if poco(name=claim_button):
-                click_Name(claim_button)
-                # 关闭弹出来的对话框
-            if poco(name=close_button):
-                click_Name(close_button)
-                # 如果只存在ok对话，关闭对话框
-            if poco("ButtonOk"):
-                click_Name("ButtonOk")
-                # 如果上一关未结束，关闭对话框
-            if poco(name=success_name1):
-                click_Name(success_name1)
-                sleep(5)
-                # 如果有新手引导礼物，关闭对话框
-            if poco(name=itemReward):
-                click_Name("OKButtonText")
-                sleep(5)
-                # 关闭活动奖励对话框
-            if poco(name="PanelMainLineActivity"):
-                click_Name("ToLevelButton")
-                sleep(5)
-                # 关闭每日签到奖励对话框
-            if poco(name="PanelDailyReward"):
-                click_Name("ClaimButton")
-                sleep(5)
-                # 判断是否进入主页面
-            if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
-                text('当前界面无任何弹框')
-                break
-    pass
+
 # 登录facebook首页方法
 def DHM_login_facebook():
     if poco("PanelUserAcceptTips").child("RootNode").child("TransContent").child("ButtonOk"):
         poco("PanelUserAcceptTips").child("RootNode").child("TransContent").child("ButtonOk").click()
     sleep(20)
-    click_Name('FacebookLogin')
-    sleep(10)
-    poco.click([0.5, 0.55])
-    sleep(5)
+    if login_mode=='facebook':
+        if poco('FacebookLogin').exists():
+            click_Name('FacebookLogin')
+            sleep(10)
+            poco.click([0.5, 0.55])
+        else:
+            click_Name('Login')
+        sleep(5)
+    else:
+        click_Name('Login')
     if poco("BtnSkip"):  # 出现引导
         sleep(2)
         for n in range(10):
@@ -315,10 +249,7 @@ def initialize_log():
     clear_touch(0.98, 0.03, 1)
 ##############################################################具体业务
 #登入模式
-if login_mode=='facebook':
-    DHM_login_facebook()
-else:
-    DHM_login_local()
+DHM_login_facebook()
 sleep(5)
 try:
     taskDay()
