@@ -1,5 +1,5 @@
 # -*- encoding=utf8 -*-
-__author__ = "tianyabin"
+__author__ = "colin"
 
 from airtest.core.api import *
 __title__ = '任务剧情'
@@ -14,7 +14,7 @@ stop_app(app_id)
 sleep(10)
 start_app(app_id)
 sleep(30)
-login_mode ='local'
+login_mode ='facebook'
 dev = device()
 sy = dev.display_info['width']
 sx = dev.display_info['height']
@@ -31,7 +31,6 @@ def currentData():  # 判断分支
     sleep(5)
     poco.click([0.48, 0.42])
     text("Confirm")
-
     sleep(2)
     poco.click([0.48, 0.42])
     sleep(3)
@@ -42,6 +41,12 @@ def currentData():  # 判断分支
         poco.click([0.5, 0.55])
         sleep(10)
         print("-----5----")
+    if exists(Template(r"tpl20191202095928.png", record_pos=(0.15, 0.196), resolution=(2560, 1440))):#下载新阶段内容
+        poco.click([0.5, 0.55])
+        sleep(28)
+        if exists(Template(r"tpl20191202100008.png", record_pos=(0.15, 0.196), resolution=(2560, 1440))):
+            touch(Template(r"tpl20191202100008.png", record_pos=(0.15, 0.196), resolution=(2560, 1440)))
+            sleep(3)
     if exists(Template(r"tpl1572408025013.png", record_pos=(0.15, 0.196), resolution=(2560, 1440))):
         touch(Template(r"tpl1572408025013.png", record_pos=(0.15, 0.196), resolution=(2560, 1440)))
         sleep(5)
@@ -60,7 +65,7 @@ def DHM_login():
         if login_mode=='facebook':
             if poco('FacebookLogin').exists():
                 touch(Template(r"tpl1574912559868.png", record_pos=(-0.144, 0.176), resolution=(2880, 1440)))
-                sleep(5)
+                sleep(20)
                 print("-----1----")
                 if poco('CurrentDataButton').exists():
                     currentData()
@@ -75,64 +80,38 @@ def DHM_login():
             print("-----7----")
         sleep(5)
     sleep(10)
-    if poco("BtnSkip").exists():  # 出现引导
-        sleep(2)
-        for n in range(10):
-            # 判断是否进入主页面 提前关闭循环
-            if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
-                break
-            if poco('QuitButton'):##引导进入活动关闭
-                click_Name("QuitButton")
-            ui = poco(name="BtnSkip")
-            try:
-                ui.invalidate()
-                ui.wait_for_appearance(timeout=20)
-                ui.click()
-                text('succee click--')
-            except PocoTargetTimeout as to:
-                print('PocoTargetTimeout', to)
-                sleep(1)
-            except PocoNoSuchNodeException as ns:
-                print('PocoNoSuchNodeException', ns)
-                sleep(1)
-    else:
-        # 跳过引导
-        # 日常登录进入首页（进入首页之前的所有窗口处理）
-        while True:
-            if poco(name="CloBtn"):
-                click_Name("CloBtn")
-            # 关闭每日签到奖励对话框
-            if poco(name=claim_button):
-                click_Name(claim_button)
-            if poco('QuitButton'):
-                click_Name("QuitButton")
-                # 关闭弹出来的对话框
-            if poco(name=close_button):
-                click_Name(close_button)
-                # 如果只存在ok对话，关闭对话框
-            if poco("ButtonOk"):
-                click_Name("ButtonOk")
-                # 如果上一关未结束，关闭对话框
-            if poco(name=success_name1):
-                click_Name(success_name1)
-                sleep(5)
-                # 如果有新手引导礼物，关闭对话框
-            if poco(name=itemReward):
-                click_Name("OKButtonText")
-                sleep(5)
-                # 关闭活动奖励对话框
-#             if poco(name="PanelMainLineActivity"):
-#                 click_Name("ToLevelButton")
-#                 sleep(5)
-                # 关闭每日签到奖励对话框
-            if poco(name="PanelDailyReward"):
-                click_Name("ClaimButton")
-                sleep(5)
-                # 判断是否进入主页面
-            if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
-                log('当前界面无任何弹框')
-                break
-    pass
+    while True:
+        if poco("BtnSkip").exists():  # 出现引导
+            poco("BtnSkip").click()
+        if poco(name="CloBtn"):
+            click_Name("CloBtn")
+        # 关闭每日签到奖励对话框
+        if poco(name=claim_button):
+            click_Name(claim_button)
+        if poco('QuitButton'):
+            click_Name("QuitButton")
+            # 关闭弹出来的对话框
+        if poco(name=close_button):
+            click_Name(close_button)
+            # 如果只存在ok对话，关闭对话框
+        if poco("ButtonOk"):
+            click_Name("ButtonOk")
+            # 如果上一关未结束，关闭对话框
+        if poco(name=success_name1):
+            click_Name(success_name1)
+            sleep(5)
+            # 如果有新手引导礼物，关闭对话框
+        if poco(name=itemReward):
+            click_Name("OKButtonText")
+            sleep(5)
+        # 关闭每日签到奖励对话框
+        if poco(name="PanelDailyReward"):
+            click_Name("ClaimButton")
+            sleep(5)
+            # 判断是否进入主页面
+        if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
+            log('当前界面无任何弹框')
+            break
 # 点击类型为name按钮并等待UI跟新
 def click_Name(arg):
     ui = poco(name=arg)
@@ -234,7 +213,27 @@ def exists_main():
                 log('当前界面无任何弹框')
                 break
 
+def taskDay():
+    poco("Main(Clone)").child("LeftBar").child("Renwu").click()
+    sleep(1)
+    if exists(Template(r"tpl1563872365821.png", record_pos=(-0.154, 0.226), resolution=(1920, 1080))):
+        click_Name("ConsumeStarCount")
+        sleep(10)
+    else:
+        try:
+            poco("Main(Clone)").child("PanelDayOverBonus2").wait_for_appearance(10)
+            get_DayOverBonus()
+        except:
+            pass
+        click_Name("ConsumeStarCount")
 
+def talk():
+    while True:
+        if poco("Main(Clone)").child("PanelNewComic").child("BtnSkip").exists():
+            poco("Main(Clone)").child("PanelNewComic").child("BtnSkip").click()
+            sleep(3)
+        else:
+            break
 # 循环对话
 def click_talk(arg):
     sleep(0.5)
@@ -277,19 +276,34 @@ def initialize_log():
 #登入模式
 DHM_login()
 sleep(5)
-try:
-    taskDay()
-    repair_select()
-    common_talk()
-    exists_main()
-    snapshot()
-    sleep(3)
+for i in range(3):
+    try:
+        taskDay()  # 接任务
+        while True:
+            if poco("Main(Clone)").child("PanelRepairSelect").exists():  # 进入三选一
+                repair_select()
+            if poco(name="BtnSkip").exists():  # 进入聊天
+                talk()
+            if exists(Template(r"tpl1575275010665.png", record_pos=(-0.058, -0.001), resolution=(1920, 1080))):#完成一个阶段任务领取奖励
+                touch(Template(r"tpl1575275010665.png", record_pos=(-0.058, -0.001), resolution=(1920, 1080)))
+                sleep(3)
+                if poco(name="BtnClose").exists(): 
+                    poco(name="BtnClose").click()
+                    sleep(1)
 
-except:
-    get_errorlog()
-    clear_touch(0.5,0.5,1)
-    exists_main()
-    raise Exception("task error")
+            if exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080))):
+                log('当前界面回到主页 ')
+                break
+        snapshot()
+        sleep(3)
 
+    except:
+        get_errorlog()
+        clear_touch(0.5, 0.5, 1)
+        exists_main()
+        raise Exception("task error")
+assert_exists(Template(r"tpl1564024885079.png", record_pos=(-0.439, 0.21), resolution=(1920, 1080)),"任务执行成功回到主页面")
+sleep(3)
 stop_app(app_id)
 sleep(3)
+
